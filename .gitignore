@@ -1,0 +1,18 @@
+apache-activemq-5.15.9/
+apache-activemq-5.15.9-bin.tar.gz
+
+### IntelliJ IDEA ###
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db%   
