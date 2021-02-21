@@ -46,7 +46,6 @@ public class CarControllerTest {
     @Autowired
     private MockMvc mvc;
 
-    @Autowired
     private JacksonTester<Car> json;
 
     @MockBean
