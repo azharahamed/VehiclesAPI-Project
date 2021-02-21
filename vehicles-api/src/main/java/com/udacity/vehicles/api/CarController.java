@@ -59,11 +59,6 @@ class CarController {
     @GetMapping("/{id}")
     Resource<Car> get(@PathVariable Long id) {
         Car car = (null != carService.findById(id)) ? carService.findById(id) : new Car() ;
-        /**
-         * TODO: Done - Use the `findById` method from the Car Service to get car information.
-         * TODO: Done - Use the `assembler` on that car and return the resulting output.
-         *   Update the first line as part of the above implementing.
-         */
         return assembler.toResource(car);
     }
 
@@ -75,13 +70,7 @@ class CarController {
      */
     @PostMapping
     ResponseEntity<?> post(@Valid @RequestBody Car car) throws URISyntaxException {
-        carService.save(car);
-        /**
-         * TODO - Done: Use the `save` method from the Car Service to save the input car.
-         * TODO - Done: Use the `assembler` on that saved car and return as part of the response.
-         *   Update the first line as part of the above implementing.
-         */
-        Resource<Car> resource = assembler.toResource(car);
+        Resource<Car> resource = assembler.toResource(carService.save(car));
         return ResponseEntity.created(new URI(resource.getId().expand().getHref())).body(resource);
     }
 
@@ -93,12 +82,6 @@ class CarController {
      */
     @PutMapping("/{id}")
     ResponseEntity<?> put(@PathVariable Long id, @Valid @RequestBody Car car) {
-        /**
-         * TODO - done: Set the id of the input car object to the `id` input.
-         * TODO - done: Save the car using the `save` method from the Car service
-         * TODO - done: Use the `assembler` on that updated car and return as part of the response.
-         *   Update the first line as part of the above implementing.
-         */
         car.setId(id);
         carService.save(car);
         Resource<Car> resource = assembler.toResource(new Car());
@@ -112,9 +95,6 @@ class CarController {
      */
     @DeleteMapping("/{id}")
     ResponseEntity<?> delete(@PathVariable Long id) {
-        /**
-         * TODO -done: Use the Car Service to delete the requested vehicle.
-         */
         carService.delete(id);
         return ResponseEntity.noContent().build();
     }
