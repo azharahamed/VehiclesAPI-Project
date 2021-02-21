@@ -1,8 +1,13 @@
 package com.udacity.vehicles.service;
 
+import com.udacity.vehicles.domain.Condition;
+import com.udacity.vehicles.domain.Location;
 import com.udacity.vehicles.domain.car.Car;
 import com.udacity.vehicles.domain.car.CarRepository;
 import java.util.List;
+
+import com.udacity.vehicles.domain.car.Details;
+import com.udacity.vehicles.domain.manufacturer.Manufacturer;
 import org.springframework.stereotype.Service;
 
 /**

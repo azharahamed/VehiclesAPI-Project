@@ -78,7 +78,7 @@ public class CarControllerTest {
     public void createCar() throws Exception {
         Car car = getCar();
         mvc.perform(
-                post(new URI("/cars"))
+                post(new URI("http://localhost:8080/cars/"))
                         .content(json.write(car).getJson())
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .accept(MediaType.APPLICATION_JSON_UTF8))
@@ -96,6 +96,13 @@ public class CarControllerTest {
          *   the whole list of vehicles. This should utilize the car from `getCar()`
          *   below (the vehicle will be the first in the list).
          */
+        createCar();
+        Car car = getCar();
+        mvc.perform(get(new URI("/cars"))
+                .accept(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("_embedded.carList[0].details.model", is(car.getDetails().getModel())))
+                .andExpect(jsonPath("_embedded.carList[0].condition", is(car.getCondition().toString())));
 
     }
 
