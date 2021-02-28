@@ -6,10 +6,13 @@ import com.udacity.vehicles.client.prices.PriceClient;
 import com.udacity.vehicles.domain.Location;
 import com.udacity.vehicles.domain.car.Car;
 import com.udacity.vehicles.domain.car.CarRepository;
+
+import java.util.ArrayList;
 import java.util.List;
 import com.udacity.vehicles.domain.car.Details;
 import com.udacity.vehicles.domain.manufacturer.Manufacturer;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -37,7 +40,15 @@ public class CarService {
      * @return a list of all vehicles in the CarRepository
      */
     public List<Car> list() {
-        return repository.findAll();
+        List<Car> carList = repository.findAll();
+        if(carList == null || carList.isEmpty()){
+            return new ArrayList<Car>();
+        }
+        carList.forEach(car -> {
+            car.setPrice(this.priceClient.getPrice(car.getId()));
+            car.setLocation(this.mapsClient.getAddress(car.getLocation()));
+        });
+        return carList;
     }
 
     /**
@@ -74,16 +85,19 @@ public class CarService {
      * @return the new/updated car is stored in the repository
      */
     public Car save(Car car) {
+        Car updateCar = null;
         if (car.getId() != null) {
-            return repository.findById(car.getId())
+            updateCar = repository.findById(car.getId())
                     .map(carToBeUpdated -> {
                         carToBeUpdated.setDetails(car.getDetails());
                         carToBeUpdated.setLocation(car.getLocation());
                         return repository.save(carToBeUpdated);
                     }).orElseThrow(CarNotFoundException::new);
         }
-
-        return repository.save(car);
+        updateCar = repository.save(car);
+        updateCar.setLocation(this.mapsClient.getAddress(updateCar.getLocation()));
+        updateCar.setPrice(this.priceClient.getPrice(updateCar.getId()));
+        return updateCar;
     }
 
     /**
